@@ -44,7 +44,7 @@ namespace FinanceTrackerAPI.Controllers
             var transaction = transactions.Find(x => x.Id == id);
             if (transaction == null)
             {
-                return BadRequest($"Transaction #{id} was not found.");
+                return NotFound($"Transaction #{id} was not found. (GET)");
             }
             return Ok(transaction);
         }
@@ -53,7 +53,30 @@ namespace FinanceTrackerAPI.Controllers
         public async Task<ActionResult<FinanceTracker>> AddTransaction(FinanceTracker transaction)
         {
             transactions.Add(transaction);
+            // change to return 201 code later
             return Ok(transaction);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateTransaction(FinanceTracker transaction)
+        {
+            var oldTransaction = transactions.Find(x => x.Id == transaction.Id);
+            if (oldTransaction == null)
+            {
+                // 404
+                return NotFound($"Transaction #{transaction.Id} was not found. (PUT)");
+            }
+
+            // switch to automapper implementation for this later
+            oldTransaction.TransactionName = transaction.TransactionName;
+            oldTransaction.Amount = transaction.Amount;
+            oldTransaction.Year = transaction.Year;
+            oldTransaction.Month = transaction.Month;
+            oldTransaction.Day = transaction.Day;
+            oldTransaction.Description = transaction.Description;
+
+            // 204
+            return NoContent();
         }
     }
 }
