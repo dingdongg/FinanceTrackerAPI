@@ -59,7 +59,7 @@ namespace FinanceTrackerAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<FinanceTracker>> AddTransaction(FinanceTracker transaction)
         {
-            _context.FinanceTrackers.AddAsync(transaction);
+            _context.FinanceTrackers.Add(transaction);
             // submit the changes to the database
             await _context.SaveChangesAsync();
             // change to return 201 code later
@@ -69,20 +69,22 @@ namespace FinanceTrackerAPI.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateTransaction(FinanceTracker transaction)
         {
-            var oldTransaction = transactions.Find(x => x.Id == transaction.Id);
-            if (oldTransaction == null)
+            var dbTransaction = await _context.FinanceTrackers.FindAsync(transaction.Id);
+            if (dbTransaction == null)
             {
                 // 404
                 return NotFound($"Transaction #{transaction.Id} was not found. (PUT)");
             }
 
             // switch to automapper implementation for this later
-            oldTransaction.TransactionName = transaction.TransactionName;
-            oldTransaction.Amount = transaction.Amount;
-            oldTransaction.Year = transaction.Year;
-            oldTransaction.Month = transaction.Month;
-            oldTransaction.Day = transaction.Day;
-            oldTransaction.Description = transaction.Description;
+            dbTransaction.TransactionName = transaction.TransactionName;
+            dbTransaction.Amount = transaction.Amount;
+            dbTransaction.Year = transaction.Year;
+            dbTransaction.Month = transaction.Month;
+            dbTransaction.Day = transaction.Day;
+            dbTransaction.Description = transaction.Description;
+
+            await _context.SaveChangesAsync();
 
             // 204
             return NoContent();
@@ -91,12 +93,13 @@ namespace FinanceTrackerAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTransaction(int id)
         {
-            var transaction = transactions.Find(x => x.Id == id);
+            var transaction = await _context.FinanceTrackers.FindAsync(id);
             if (transaction == null)
             {
-                return NotFound($"Transaction #{transaction.Id} was not found. (DELETE)");
+                return NotFound($"Transaction #{id} was not found. (DELETE)");
             }
-            transactions.Remove(transaction);
+            _context.FinanceTrackers.Remove(transaction);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }
