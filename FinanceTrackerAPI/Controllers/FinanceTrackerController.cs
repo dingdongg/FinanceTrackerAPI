@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTrackerAPI.Controllers
@@ -76,6 +77,18 @@ namespace FinanceTrackerAPI.Controllers
             oldTransaction.Description = transaction.Description;
 
             // 204
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTransaction(int id)
+        {
+            var transaction = transactions.Find(x => x.Id == id);
+            if (transaction == null)
+            {
+                return NotFound($"Transaction #{transaction.Id} was not found. (DELETE)");
+            }
+            transactions.Remove(transaction);
             return NoContent();
         }
     }
