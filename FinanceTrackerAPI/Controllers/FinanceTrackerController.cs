@@ -31,11 +31,17 @@ namespace FinanceTrackerAPI.Controllers
                 Description = "some description!"
             }
         };
+        private readonly DataContext _context;
+
+        public FinanceTrackerController(DataContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<FinanceTracker>>> Get()
         {
-            return Ok(transactions);
+            return Ok(await _context.FinanceTrackers.ToListAsync());
         }
 
         [HttpGet("{id}")]
