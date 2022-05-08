@@ -37,7 +37,8 @@ namespace FinanceTrackerAPI.Controllers
             return Ok(transactions);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
+        //[Route("{id}")]  -->  redundant; Route() is better used to route HTTP requests to a particular controller, not a specific method
         public async Task<ActionResult<FinanceTracker>> GetTransactionById(int id)
         {
             var transaction = transactions.Find(x => x.Id == id);
