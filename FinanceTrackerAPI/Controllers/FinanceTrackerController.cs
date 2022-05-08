@@ -8,7 +8,7 @@ namespace FinanceTrackerAPI.Controllers
     public class FinanceTrackerController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<FinanceTracker>>> Get()
         {
             var transactions = new List<FinanceTracker>
             {
@@ -17,7 +17,9 @@ namespace FinanceTrackerAPI.Controllers
                     Id = 1,
                     TransactionName = "dummy transaction",
                     Amount = 250.99,
-                    TransactionDate = new DateOnly(1, 1, 2001),
+                    Year = 2001,
+                    Month = 1,
+                    Day = 1,
                     Description = "i bought something incredibly expensive"
                 }
             };
