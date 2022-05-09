@@ -10,11 +10,14 @@ namespace FinanceTrackerAPI.Controllers
     public class FinanceTrackerController : ControllerBase
     {
         private readonly DataContext _context;
-        private readonly MockTransactionRepo _repository = new MockTransactionRepo();
+        private readonly ITransactionRepo _repository;
 
-        public FinanceTrackerController(DataContext context)
+        public FinanceTrackerController(DataContext context, ITransactionRepo repo)
         {
             _context = context;
+
+            // inject dependency on ITransactionRepo into FinanceTrackerController
+            _repository = repo;
         }
 
         [HttpGet]
