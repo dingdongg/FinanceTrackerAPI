@@ -1,11 +1,16 @@
 global using FinanceTrackerAPI.Data;
 global using Microsoft.EntityFrameworkCore;
+using FinanceTrackerAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+// registers the mock repo implementation to its interface (for now)
+builder.Services.AddScoped<ITransactionRepo, MockTransactionRepo>();
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
     // connection to SQL Server using the connection string
