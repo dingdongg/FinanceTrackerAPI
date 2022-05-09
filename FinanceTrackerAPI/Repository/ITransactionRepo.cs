@@ -3,7 +3,7 @@
     public interface ITransactionRepo
     {
         bool SaveChanges();
-        IEnumerable<Transaction> GetAllTransaction();
+        IEnumerable<Transaction> GetAllTransactions();
         Transaction GetTransactionById(int id);
         void CreateTransaction(Transaction trctn);
         void UpdateTransaction(Transaction trctn);
