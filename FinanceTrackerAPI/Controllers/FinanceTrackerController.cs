@@ -8,22 +8,22 @@ namespace FinanceTrackerAPI.Controllers
     [ApiController]
     public class FinanceTrackerController : ControllerBase
     {
-        private static List<FinanceTracker> transactions = new List<FinanceTracker>
+        private static List<Transaction> transactions = new List<Transaction>
         {
-            new FinanceTracker
+            new Transaction
             {
                 Id = 1,
-                TransactionName = "dummy transaction",
+                Name = "dummy transaction",
                 Amount = 250.99,
                 Year = 2001,
                 Month = 1,
                 Day = 1,
                 Description = "i bought something incredibly expensive"
             },
-            new FinanceTracker
+            new Transaction
             {
                 Id = 2,
-                TransactionName = "another dummy transaction",
+                Name = "another dummy transaction",
                 Amount = 1234.66,
                 Year = 2022,
                 Month = 5,
@@ -39,14 +39,14 @@ namespace FinanceTrackerAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<FinanceTracker>>> Get()
+        public async Task<ActionResult<List<Transaction>>> Get()
         {
             return Ok(await _context.FinanceTrackers.ToListAsync());
         }
 
         [HttpGet("{id}")]
         //[Route("{id}")]  -->  redundant; Route() is better used to route HTTP requests to a particular controller, not a specific method
-        public async Task<ActionResult<FinanceTracker>> GetTransactionById(int id)
+        public async Task<ActionResult<Transaction>> GetTransactionById(int id)
         {
             var transaction = await _context.FinanceTrackers.FindAsync(id);
             if (transaction == null)
@@ -57,7 +57,7 @@ namespace FinanceTrackerAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<FinanceTracker>> AddTransaction(FinanceTracker transaction)
+        public async Task<ActionResult<Transaction>> AddTransaction(Transaction transaction)
         {
             _context.FinanceTrackers.Add(transaction);
             // submit the changes to the database
@@ -67,7 +67,7 @@ namespace FinanceTrackerAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateTransaction(FinanceTracker transaction)
+        public async Task<ActionResult> UpdateTransaction(Transaction transaction)
         {
             var dbTransaction = await _context.FinanceTrackers.FindAsync(transaction.Id);
             if (dbTransaction == null)
@@ -77,7 +77,7 @@ namespace FinanceTrackerAPI.Controllers
             }
 
             // switch to automapper implementation for this later
-            dbTransaction.TransactionName = transaction.TransactionName;
+            dbTransaction.Name = transaction.Name;
             dbTransaction.Amount = transaction.Amount;
             dbTransaction.Year = transaction.Year;
             dbTransaction.Month = transaction.Month;

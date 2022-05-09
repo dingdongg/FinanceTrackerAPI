@@ -9,6 +9,6 @@ namespace FinanceTrackerAPI.Data
 
         }
 
-        public DbSet<FinanceTracker> FinanceTrackers { get; set; }
+        public DbSet<Transaction> FinanceTrackers { get; set; }
     }
 }
