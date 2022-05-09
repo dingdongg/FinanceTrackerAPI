@@ -32,6 +32,10 @@ namespace FinanceTrackerAPI.Controllers
         public async Task<ActionResult<Transaction>> GetTransactionById(int id)
         {
             var transaction = _repository.GetTransactionById(id);
+            if (transaction == null)
+            {
+                return NotFound($"Transaction #{id} was not found. (GET)");
+            }
             return Ok(transaction);
             //var transaction = await _context.FinanceTrackers.FindAsync(id);
             //if (transaction == null)
@@ -41,51 +45,51 @@ namespace FinanceTrackerAPI.Controllers
             //return Ok(transaction);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Transaction>> AddTransaction(Transaction transaction)
-        {
-            _context.Transactions.Add(transaction);
-            // submit the changes to the database
-            await _context.SaveChangesAsync();
-            // change to return 201 code later
-            return Ok(transaction);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<Transaction>> AddTransaction(Transaction transaction)
+        //{
+        //    _context.Transactions.Add(transaction);
+        //    // submit the changes to the database
+        //    await _context.SaveChangesAsync();
+        //    // change to return 201 code later
+        //    return Ok(transaction);
+        //}
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateTransaction(Transaction transaction)
-        {
-            var dbTransaction = await _context.Transactions.FindAsync(transaction.Id);
-            if (dbTransaction == null)
-            {
-                // 404
-                return NotFound($"Transaction #{transaction.Id} was not found. (PUT)");
-            }
+        //[HttpPut]
+        //public async Task<ActionResult> UpdateTransaction(Transaction transaction)
+        //{
+        //    var dbTransaction = await _context.Transactions.FindAsync(transaction.Id);
+        //    if (dbTransaction == null)
+        //    {
+        //        // 404
+        //        return NotFound($"Transaction #{transaction.Id} was not found. (PUT)");
+        //    }
 
-            // switch to automapper implementation for this later
-            dbTransaction.Name = transaction.Name;
-            dbTransaction.Amount = transaction.Amount;
-            dbTransaction.Year = transaction.Year;
-            dbTransaction.Month = transaction.Month;
-            dbTransaction.Day = transaction.Day;
-            dbTransaction.Description = transaction.Description;
+        //    // switch to automapper implementation for this later
+        //    dbTransaction.Name = transaction.Name;
+        //    dbTransaction.Amount = transaction.Amount;
+        //    dbTransaction.Year = transaction.Year;
+        //    dbTransaction.Month = transaction.Month;
+        //    dbTransaction.Day = transaction.Day;
+        //    dbTransaction.Description = transaction.Description;
 
-            await _context.SaveChangesAsync();
+        //    await _context.SaveChangesAsync();
 
-            // 204
-            return NoContent();
-        }
+        //    // 204
+        //    return NoContent();
+        //}
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTransaction(int id)
-        {
-            var transaction = await _context.Transactions.FindAsync(id);
-            if (transaction == null)
-            {
-                return NotFound($"Transaction #{id} was not found. (DELETE)");
-            }
-            _context.Transactions.Remove(transaction);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult> DeleteTransaction(int id)
+        //{
+        //    var transaction = await _context.Transactions.FindAsync(id);
+        //    if (transaction == null)
+        //    {
+        //        return NotFound($"Transaction #{id} was not found. (DELETE)");
+        //    }
+        //    _context.Transactions.Remove(transaction);
+        //    await _context.SaveChangesAsync();
+        //    return NoContent();
+        //}
     }
 }
