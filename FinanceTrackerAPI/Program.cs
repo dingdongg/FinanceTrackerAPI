@@ -1,5 +1,7 @@
 global using FinanceTrackerAPI.Data;
 global using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using FinanceTrackerAPI.Profiles;
 using FinanceTrackerAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(TransactionsProfile));
 
 // registers the mock repo implementation to its interface (for now)
 builder.Services.AddScoped<ITransactionRepo, SqlTransactionRepo>();
