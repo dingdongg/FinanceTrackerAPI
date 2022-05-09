@@ -19,7 +19,11 @@
 
         public void DeleteTransaction(Transaction trctn)
         {
-            throw new NotImplementedException();
+            if (trctn == null)
+            {
+                throw new ArgumentException(nameof(trctn));
+            }
+            _context.Transactions.Remove(trctn);
         }
 
         public IEnumerable<Transaction> GetAllTransactions()
