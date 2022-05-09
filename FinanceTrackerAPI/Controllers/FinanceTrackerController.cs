@@ -30,7 +30,7 @@ namespace FinanceTrackerAPI.Controllers
             //return Ok(await _context.FinanceTrackers.ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetTransactionById")]
         //[Route("{id}")]  -->  redundant; Route() is better used to route HTTP requests to a particular controller, not a specific method
         public async Task<ActionResult<TransactionReadDTO>> GetTransactionById(int id)
         {
@@ -49,15 +49,17 @@ namespace FinanceTrackerAPI.Controllers
             //return Ok(transaction);
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<Transaction>> AddTransaction(Transaction transaction)
-        //{
-        //    _context.Transactions.Add(transaction);
-        //    // submit the changes to the database
-        //    await _context.SaveChangesAsync();
-        //    // change to return 201 code later
-        //    return Ok(transaction);
-        //}
+        [HttpPost]
+        public async Task<ActionResult<TransactionReadDTO>> AddTransaction(TransactionCreateDTO inputDTO)
+        {
+            var modelTransaction = _mapper.Map<Transaction>(inputDTO);
+            _repository.CreateTransaction(modelTransaction);
+            _repository.SaveChanges();
+
+            var readDTO = _mapper.Map<TransactionReadDTO>(modelTransaction);
+
+            return CreatedAtRoute(nameof(GetTransactionById), new { Id = readDTO.Id }, readDTO);
+        }
 
         //[HttpPut]
         //public async Task<ActionResult> UpdateTransaction(Transaction transaction)
