@@ -20,12 +20,12 @@
 
         public IEnumerable<Transaction> GetAllTransactions()
         {
-            throw new NotImplementedException();
+            return _context.Transactions.ToList();
         }
 
         public Transaction GetTransactionById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Transactions.FirstOrDefault(t => t.Id == id);
         }
 
         public bool SaveChanges()
