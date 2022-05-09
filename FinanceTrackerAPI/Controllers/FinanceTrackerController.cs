@@ -96,17 +96,18 @@ namespace FinanceTrackerAPI.Controllers
 
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult> DeleteTransaction(int id)
-        //{
-        //    var transaction = await _context.Transactions.FindAsync(id);
-        //    if (transaction == null)
-        //    {
-        //        return NotFound($"Transaction #{id} was not found. (DELETE)");
-        //    }
-        //    _context.Transactions.Remove(transaction);
-        //    await _context.SaveChangesAsync();
-        //    return NoContent();
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTransaction(int id)
+        {
+            var modelTransaction = _repository.GetTransactionById(id);
+            if (modelTransaction == null)
+            {
+                return NotFound($"Transaction #{id} was not found. (DELETE)");
+            }
+            _repository.DeleteTransaction(modelTransaction);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
