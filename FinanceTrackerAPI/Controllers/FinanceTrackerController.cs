@@ -71,6 +71,31 @@ namespace FinanceTrackerAPI.Controllers
             return NoContent();
         }
 
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> TweakTransaction(int id, JsonPatchDocument<TransactionUpdateDTO> patchDoc)
+        {
+            var transactionModel = _repository.GetTransactionById(id);
+            if (transactionModel == null)
+            {
+                return NotFound($"Transaction #{id} was not found. (PUT)");
+            }
+
+            var DTOtoPatch = _mapper.Map<TransactionUpdateDTO>(transactionModel);
+            patchDoc.ApplyTo(DTOtoPatch, ModelState);
+
+            if (!TryValidateModel(DTOtoPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(DTOtoPatch, transactionModel);
+            _repository.UpdateTransaction(transactionModel);
+            _repository.SaveChanges();
+
+            return NoContent();
+
+        }
+
         //[HttpDelete("{id}")]
         //public async Task<ActionResult> DeleteTransaction(int id)
         //{
