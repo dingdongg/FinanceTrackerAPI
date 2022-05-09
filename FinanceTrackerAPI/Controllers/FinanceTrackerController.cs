@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FinanceTrackerAPI.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,30 +9,8 @@ namespace FinanceTrackerAPI.Controllers
     [ApiController]
     public class FinanceTrackerController : ControllerBase
     {
-        private static List<Transaction> transactions = new List<Transaction>
-        {
-            new Transaction
-            {
-                Id = 1,
-                Name = "dummy transaction",
-                Amount = 250.99,
-                Year = 2001,
-                Month = 1,
-                Day = 1,
-                Description = "i bought something incredibly expensive"
-            },
-            new Transaction
-            {
-                Id = 2,
-                Name = "another dummy transaction",
-                Amount = 1234.66,
-                Year = 2022,
-                Month = 5,
-                Day = 9,
-                Description = "some description!"
-            }
-        };
         private readonly DataContext _context;
+        private readonly MockTransactionRepo _repository = new MockTransactionRepo();
 
         public FinanceTrackerController(DataContext context)
         {
@@ -39,21 +18,24 @@ namespace FinanceTrackerAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Transaction>>> Get()
+        public async Task<ActionResult<List<Transaction>>> GetAllTransactions()
         {
-            return Ok(await _context.FinanceTrackers.ToListAsync());
+            return Ok(_repository.GetAllTransactions());
+            //return Ok(await _context.FinanceTrackers.ToListAsync());
         }
 
         [HttpGet("{id}")]
         //[Route("{id}")]  -->  redundant; Route() is better used to route HTTP requests to a particular controller, not a specific method
         public async Task<ActionResult<Transaction>> GetTransactionById(int id)
         {
-            var transaction = await _context.FinanceTrackers.FindAsync(id);
-            if (transaction == null)
-            {
-                return NotFound($"Transaction #{id} was not found. (GET)");
-            }
+            var transaction = _repository.GetTransactionById(id);
             return Ok(transaction);
+            //var transaction = await _context.FinanceTrackers.FindAsync(id);
+            //if (transaction == null)
+            //{
+            //    return NotFound($"Transaction #{id} was not found. (GET)");
+            //}
+            //return Ok(transaction);
         }
 
         [HttpPost]
