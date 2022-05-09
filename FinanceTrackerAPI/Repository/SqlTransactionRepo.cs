@@ -30,7 +30,7 @@
 
         public bool SaveChanges()
         {
-            throw new NotImplementedException();
+            return _context.SaveChanges() >= 0;
         }
 
         public void UpdateTransaction(Transaction trctn)
