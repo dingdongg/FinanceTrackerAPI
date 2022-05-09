@@ -39,7 +39,11 @@
 
         public void UpdateTransaction(Transaction trctn)
         {
-            throw new NotImplementedException();
+            // Nothing!
+            // * since SQL Server DB Context automatically makes the updates,
+            // this method doesn't have to do anything.
+            // If the implementation of the repo interface were to change in the future
+            // to use a DIFFERENT DB context, this method will likely have to be updated as well.
         }
     }
 }
