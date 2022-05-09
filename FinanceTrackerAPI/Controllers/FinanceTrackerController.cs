@@ -41,12 +41,6 @@ namespace FinanceTrackerAPI.Controllers
             }
             var returnDTO = _mapper.Map<TransactionReadDTO>(transaction);
             return Ok(returnDTO);
-            //var transaction = await _context.FinanceTrackers.FindAsync(id);
-            //if (transaction == null)
-            //{
-            //    return NotFound($"Transaction #{id} was not found. (GET)");
-            //}
-            //return Ok(transaction);
         }
 
         [HttpPost]
@@ -61,29 +55,21 @@ namespace FinanceTrackerAPI.Controllers
             return CreatedAtRoute(nameof(GetTransactionById), new { Id = readDTO.Id }, readDTO);
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult> UpdateTransaction(Transaction transaction)
-        //{
-        //    var dbTransaction = await _context.Transactions.FindAsync(transaction.Id);
-        //    if (dbTransaction == null)
-        //    {
-        //        // 404
-        //        return NotFound($"Transaction #{transaction.Id} was not found. (PUT)");
-        //    }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateTransaction(int id, TransactionUpdateDTO inputDTO)
+        {
+            var transactionModel = _repository.GetTransactionById(id);
+            if (transactionModel == null)
+            {
+                return NotFound($"Transaction #{id} was not found. (PUT)");
+            }
 
-        //    // switch to automapper implementation for this later
-        //    dbTransaction.Name = transaction.Name;
-        //    dbTransaction.Amount = transaction.Amount;
-        //    dbTransaction.Year = transaction.Year;
-        //    dbTransaction.Month = transaction.Month;
-        //    dbTransaction.Day = transaction.Day;
-        //    dbTransaction.Description = transaction.Description;
+            _mapper.Map(inputDTO, transactionModel);
+            _repository.UpdateTransaction(transactionModel);
+            _repository.SaveChanges();
 
-        //    await _context.SaveChangesAsync();
-
-        //    // 204
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         //[HttpDelete("{id}")]
         //public async Task<ActionResult> DeleteTransaction(int id)
