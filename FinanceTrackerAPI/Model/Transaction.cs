@@ -15,7 +15,7 @@ namespace FinanceTrackerAPI
         public double Amount { get; set; }
 
         [Required]
-        [Range(1900, Double.MaxValue, ErrorMessage = "Enter a year greater than {0}")]
+        [Range(1900, int.MaxValue, ErrorMessage = "Enter a year greater than {0}")]
         public int Year { get; set; }
 
         [Required]
@@ -27,6 +27,6 @@ namespace FinanceTrackerAPI
         public int Day { get; set; }
 
 
-        public string Description { get; set; } = String.Empty;
+        public string? Description { get; set; }
     }
 }
