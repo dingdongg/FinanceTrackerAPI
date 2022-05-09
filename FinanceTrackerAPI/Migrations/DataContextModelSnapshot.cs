@@ -21,7 +21,7 @@ namespace FinanceTrackerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("FinanceTrackerAPI.FinanceTracker", b =>
+            modelBuilder.Entity("FinanceTrackerAPI.Transaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,13 +36,12 @@ namespace FinanceTrackerAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<string>("TransactionName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -51,7 +50,7 @@ namespace FinanceTrackerAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinanceTrackers");
+                    b.ToTable("Transactions");
                 });
 #pragma warning restore 612, 618
         }

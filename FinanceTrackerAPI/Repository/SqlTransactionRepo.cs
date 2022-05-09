@@ -10,7 +10,11 @@
         }
         public void CreateTransaction(Transaction trctn)
         {
-            throw new NotImplementedException();
+            if (trctn == null)
+            {
+                throw new ArgumentNullException(nameof(trctn));
+            }
+            _context.Transactions.Add(trctn);
         }
 
         public void DeleteTransaction(Transaction trctn)
