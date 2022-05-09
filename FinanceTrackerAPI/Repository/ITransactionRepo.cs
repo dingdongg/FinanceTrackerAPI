@@ -2,5 +2,11 @@
 {
     public interface ITransactionRepo
     {
+        bool SaveChanges();
+        IEnumerable<Transaction> GetAllTransaction();
+        Transaction GetTransactionById(int id);
+        void CreateTransaction(Transaction trctn);
+        void UpdateTransaction(Transaction trctn);
+        void DeleteTransaction(Transaction trctn);
     }
 }
