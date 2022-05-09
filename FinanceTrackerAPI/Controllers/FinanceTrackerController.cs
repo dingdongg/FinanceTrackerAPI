@@ -44,7 +44,7 @@ namespace FinanceTrackerAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Transaction>> AddTransaction(Transaction transaction)
         {
-            _context.FinanceTrackers.Add(transaction);
+            _context.Transactions.Add(transaction);
             // submit the changes to the database
             await _context.SaveChangesAsync();
             // change to return 201 code later
@@ -54,7 +54,7 @@ namespace FinanceTrackerAPI.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateTransaction(Transaction transaction)
         {
-            var dbTransaction = await _context.FinanceTrackers.FindAsync(transaction.Id);
+            var dbTransaction = await _context.Transactions.FindAsync(transaction.Id);
             if (dbTransaction == null)
             {
                 // 404
@@ -78,12 +78,12 @@ namespace FinanceTrackerAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTransaction(int id)
         {
-            var transaction = await _context.FinanceTrackers.FindAsync(id);
+            var transaction = await _context.Transactions.FindAsync(id);
             if (transaction == null)
             {
                 return NotFound($"Transaction #{id} was not found. (DELETE)");
             }
-            _context.FinanceTrackers.Remove(transaction);
+            _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
             return NoContent();
         }

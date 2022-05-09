@@ -6,9 +6,9 @@ namespace FinanceTrackerAPI.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-
+            // nothing needed
         }
 
-        public DbSet<Transaction> FinanceTrackers { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }
