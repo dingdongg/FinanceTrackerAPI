@@ -1,4 +1,6 @@
-﻿using FinanceTrackerAPI.Repository;
+﻿using AutoMapper;
+using FinanceTrackerAPI.DTOs;
+using FinanceTrackerAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -9,34 +11,36 @@ namespace FinanceTrackerAPI.Controllers
     [ApiController]
     public class FinanceTrackerController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IMapper _mapper;
         private readonly ITransactionRepo _repository;
 
-        public FinanceTrackerController(DataContext context, ITransactionRepo repo)
+        public FinanceTrackerController(IMapper mapper, ITransactionRepo repo)
         {
-            _context = context;
+            _mapper = mapper;
 
             // inject dependency on ITransactionRepo into FinanceTrackerController
             _repository = repo;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Transaction>>> GetAllTransactions()
+        public async Task<ActionResult<List<TransactionReadDTO>>> GetAllTransactions()
         {
-            return Ok(_repository.GetAllTransactions());
+            var transactions = _repository.GetAllTransactions();
+            return Ok(_mapper.Map<IEnumerable<TransactionReadDTO>>(transactions));
             //return Ok(await _context.FinanceTrackers.ToListAsync());
         }
 
         [HttpGet("{id}")]
         //[Route("{id}")]  -->  redundant; Route() is better used to route HTTP requests to a particular controller, not a specific method
-        public async Task<ActionResult<Transaction>> GetTransactionById(int id)
+        public async Task<ActionResult<TransactionReadDTO>> GetTransactionById(int id)
         {
             var transaction = _repository.GetTransactionById(id);
             if (transaction == null)
             {
                 return NotFound($"Transaction #{id} was not found. (GET)");
             }
-            return Ok(transaction);
+            var returnDTO = _mapper.Map<TransactionReadDTO>(transaction);
+            return Ok(returnDTO);
             //var transaction = await _context.FinanceTrackers.FindAsync(id);
             //if (transaction == null)
             //{
