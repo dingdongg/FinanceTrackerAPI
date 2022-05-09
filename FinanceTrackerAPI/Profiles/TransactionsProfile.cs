@@ -10,6 +10,7 @@ namespace FinanceTrackerAPI.Profiles
             CreateMap<Transaction, TransactionReadDTO>();
             CreateMap<TransactionCreateDTO, Transaction>();
             CreateMap<TransactionUpdateDTO, Transaction>();
+            CreateMap<Transaction, TransactionUpdateDTO>();
         }
     }
 }
